@@ -30,6 +30,8 @@ make test      # or: make coverage
 
 Coverage is 100% for `calc` and `api` in the backend and for the frontend source (`main.go` and `main.tsx` only wire things up and aren't tested). `make coverage` writes HTML reports to `backend/coverage.html` and `frontend/coverage/index.html`. CI uploads both as artifacts of each run (`backend-coverage`, `frontend-coverage`).
 
+CI runs on pushes to `main`, on pull requests, and manually from the Actions tab or with `gh workflow run CI`.
+
 ## API
 
 `POST /api/v1/calculate` with `{"operation", "a", "b"}`. Returns `{"result": number}` or `{"error": string}`.

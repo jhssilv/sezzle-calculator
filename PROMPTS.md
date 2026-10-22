@@ -63,3 +63,7 @@ The prompts used to build this project with Claude Code, in order.
 > - README with setup, how to run frontend and backend, API examples, and design decisions or assumptions.
 > - Optional: a Dockerfile to run frontend and backend together.
 > - Share the prompts used.
+
+## 4. Manual CI runs
+
+> Can we run the CI manually?
