@@ -50,3 +50,16 @@ The prompts used to build this project with Claude Code, in order.
 ## 2. Makefile
 
 > Create a makefile
+
+## 3. Check against the assignment
+
+> Check if the project is correct according to the original assignment:
+>
+> - Full-stack calculator: React (TypeScript) frontend consuming a REST backend (Go).
+> - Operations: add, subtract, multiply, divide. Optional: power, square root, percentage.
+> - Frontend: intuitive UI, input validation and error handling, basic mobile support.
+> - Backend: endpoints for the operations, input validation and edge cases (division by zero, invalid data), JSON responses.
+> - Clean, idiomatic code with unit tests for both layers and a coverage report.
+> - README with setup, how to run frontend and backend, API examples, and design decisions or assumptions.
+> - Optional: a Dockerfile to run frontend and backend together.
+> - Share the prompts used.
