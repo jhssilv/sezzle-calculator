@@ -5,8 +5,7 @@ A keypad calculator. The React + TypeScript frontend sends each step to a Go RES
 ## Run with Docker
 
 ```sh
-docker build -t sezzle-calculator .
-docker run --rm -p 8080:8080 sezzle-calculator
+make docker-run
 ```
 
 Open http://localhost:8080.
@@ -16,18 +15,17 @@ Open http://localhost:8080.
 Requires Go 1.25+ and Node 22.12+.
 
 ```sh
-# API on :8080
-cd backend && go run .
-
-# Frontend on :5173, proxies /api to :8080
-cd frontend && npm ci && npm run dev
+make install
+make backend   # API on :8080
+make frontend  # in another terminal, on :5173, proxies /api to :8080
 ```
+
+`make build` builds the frontend into `frontend/dist` and the server into `bin/server`. Run `STATIC_DIR=frontend/dist bin/server` to serve both on :8080.
 
 ## Tests
 
 ```sh
-cd backend && go test -cover ./...
-cd frontend && npm run coverage
+make test      # or: make coverage
 ```
 
 Coverage is 100% for `calc` and `api` in the backend and for the frontend source (`main.go` and `main.tsx` only wire things up and aren't tested).
