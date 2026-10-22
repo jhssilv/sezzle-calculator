@@ -12,7 +12,7 @@ Open http://localhost:8080.
 
 ## Run locally
 
-Requires Go 1.25+ and Node 22.12+.
+Requires Go 1.25+ and Node 22.22+ or 24+.
 
 ```sh
 make install
@@ -28,7 +28,7 @@ make frontend  # in another terminal, on :5173, proxies /api to :8080
 make test      # or: make coverage
 ```
 
-Coverage is 100% for `calc` and `api` in the backend and for the frontend source (`main.go` and `main.tsx` only wire things up and aren't tested).
+Coverage is 100% for `calc` and `api` in the backend and for the frontend source (`main.go` and `main.tsx` only wire things up and aren't tested). `make coverage` writes HTML reports to `backend/coverage.html` and `frontend/coverage/index.html`. CI uploads both as artifacts of each run (`backend-coverage`, `frontend-coverage`).
 
 ## API
 
@@ -47,6 +47,8 @@ Coverage is 100% for `calc` and `api` in the backend and for the frontend source
 | 405 | Method other than POST |
 | 422 | Division by zero, square root of a negative number, non-finite result |
 
+Add `-i` to see the status code.
+
 ```sh
 curl -X POST localhost:8080/api/v1/calculate -d '{"operation":"add","a":12,"b":3}'
 # {"result":15}
@@ -63,10 +65,11 @@ curl -X POST localhost:8080/api/v1/calculate -d '{"operation":"add","a":1}'
 
 ## Design decisions
 
+- **One endpoint.** `operation` is a field instead of one route per operation, so the API stays the same as operations are added and the frontend calls a single function.
 - **Backend layout.** `calc` holds the operation registry, a map from name to function. `api` handles HTTP and maps errors to status codes. Adding an operation means adding one map entry.
 - **Missing vs. zero.** Operands decode into `*float64`, so `{"a": 1}` is a 400 while `{"a": 1, "b": 0}` is valid.
 - **Non-finite results.** JSON can't represent `Inf` or `NaN`, so results like `0 ^ -1` or `10 ^ 400` return 422.
-- **Unary operations ignore `b`** instead of rejecting it.
+- **Unary operations ignore `b`** instead of rejecting it. Unknown JSON fields are ignored too; trailing data after the object is a 400.
 - **One container.** The Go server serves the built frontend from `STATIC_DIR`, so there is no CORS. In development, Vite proxies `/api`.
 - **Pure reducer.** `calculator.ts` holds all keypad logic. When a step needs the API, the reducer stores a `request` in state. `App` sends it and dispatches the result or error back. This keeps the reducer testable without mocks and means keys are ignored while a request is pending.
 - **Physical calculator behavior.** No operator precedence: `2 + 3 × 4 =` is `20`. Pressing an operator after a second operand sends the pending step. The display is the source of truth, so the next step uses the rounded value shown.

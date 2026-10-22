@@ -17,7 +17,7 @@ test:
 	cd frontend && npm test
 
 coverage:
-	cd backend && go test -cover ./...
+	cd backend && go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out -o coverage.html
 	cd frontend && npm run coverage
 
 build:

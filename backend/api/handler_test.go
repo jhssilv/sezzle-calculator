@@ -18,11 +18,15 @@ func TestCalculate(t *testing.T) {
 		wantError  string
 	}{
 		{"add", "POST", `{"operation":"add","a":12,"b":3}`, 200, ptr(15), ""},
+		{"trailing newline", "POST", "{\"operation\":\"add\",\"a\":1,\"b\":2}\n", 200, ptr(3), ""},
 		{"zero operand", "POST", `{"operation":"multiply","a":7,"b":0}`, 200, ptr(0), ""},
 		{"unary ignores b", "POST", `{"operation":"sqrt","a":16,"b":99}`, 200, ptr(4), ""},
 		{"unary without b", "POST", `{"operation":"percentage","a":25}`, 200, ptr(0.25), ""},
 		{"wrong method", "GET", "", 405, nil, "method not allowed"},
 		{"bad JSON", "POST", `{"operation":`, 400, nil, "invalid JSON body"},
+		{"trailing data", "POST", `{"operation":"add","a":1,"b":2}garbage`, 400, nil, "invalid JSON body"},
+		{"two objects", "POST", `{"operation":"add","a":1,"b":2}{}`, 400, nil, "invalid JSON body"},
+		{"empty body", "POST", "", 400, nil, "invalid JSON body"},
 		{"wrong type", "POST", `{"operation":"add","a":"1","b":2}`, 400, nil, "invalid JSON body"},
 		{"too large", "POST", `{"operation":"add","a":1,"b":2,"x":"` + strings.Repeat("x", 2000) + `"}`, 400, nil, "invalid JSON body"},
 		{"unknown operation", "POST", `{"operation":"modulo","a":1,"b":2}`, 400, nil, "unknown operation: modulo"},

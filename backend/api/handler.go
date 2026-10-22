@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/jhssilv/sezzle-calculator/backend/calc"
@@ -27,7 +28,9 @@ func Calculate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req request
-	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<10)).Decode(&req); err != nil {
+	dec := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<10))
+	// The second Decode rejects trailing data after the JSON object.
+	if err := dec.Decode(&req); err != nil || dec.Decode(&struct{}{}) != io.EOF {
 		writeError(w, http.StatusBadRequest, "invalid JSON body")
 		return
 	}
