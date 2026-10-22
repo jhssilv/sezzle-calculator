@@ -1,6 +1,8 @@
-# Prompt
+# Prompts
 
-The prompt used to build this project with Claude Code:
+The prompts used to build this project with Claude Code, in order.
+
+## 1. Initial build
 
 > Build a calculator for a take-home assignment: React + TypeScript frontend, Go REST backend. Follow YAGNI and KISS. Only comment what the code doesn't already say. Keep docs short and plain.
 >
@@ -44,3 +46,7 @@ The prompt used to build this project with Claude Code:
 > - A GitHub Actions workflow that runs the backend and frontend tests and builds the Docker image.
 > - A `README.md` with setup, how to run, API examples with curl, and the design decisions and assumptions.
 > - A `PROMPTS.md` containing this prompt.
+
+## 2. Makefile
+
+> Create a makefile
